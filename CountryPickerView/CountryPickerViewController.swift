@@ -138,6 +138,10 @@ extension CountryPickerViewController {
         }
         cell.imageView?.image = country.flag
         
+        if let tint = dataSource.cellTintColour {
+            cell.tintColor = tint
+        }
+        
         cell.flgSize = dataSource.cellImageViewSize
         cell.imageView?.clipsToBounds = true
 
@@ -195,14 +199,14 @@ extension CountryPickerViewController {
         searchController?.isActive = false
         searchController?.dismiss(animated: false, completion: nil)
         
-        let completion = {
+        //let completion = {
             self.countryPickerView.selectedCountry = country
-        }
+        //}
         // If this is root, dismiss, else pop
         if navigationController?.viewControllers.count == 1 {
-            navigationController?.dismiss(animated: true, completion: completion)
+            navigationController?.dismiss(animated: true, completion: nil)
         } else {
-            navigationController?.popViewController(animated: true, completion: completion)
+            navigationController?.popViewController(animated: true, completion: {})
         }
     }
 }
@@ -327,7 +331,7 @@ class CountryPickerViewDataSourceInternal: CountryPickerViewDataSource {
     
     var closeButtonNavigationItem: UIBarButtonItem {
         guard let button = view.dataSource?.closeButtonNavigationItem(in: view) else {
-            return UIBarButtonItem(title: "Close", style: .done, target: nil, action: nil)
+            return UIBarButtonItem(title: "Cancel", style: .done, target: nil, action: nil)
         }
         return button
     }
@@ -355,4 +359,9 @@ class CountryPickerViewDataSourceInternal: CountryPickerViewDataSource {
     var excludedCountries: [Country] {
         return view.dataSource?.excludedCountries(in: view) ?? excludedCountries(in: view)
     }
+    
+    var cellTintColour: UIColor? {
+        return view.dataSource?.selectedItemTintColour(in: view) ?? nil
+    }
+
 }
