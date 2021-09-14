@@ -22,8 +22,9 @@ public struct Country: Equatable {
         return locale.localizedString(forRegionCode: code)
     }
     public var flag: UIImage {
-        return UIImage(named: "CountryPickerView.bundle/Images/\(code.uppercased())",
-            in: Bundle(for: CountryPickerView.self), compatibleWith: nil)!
+        let bundle = Bundle.module
+        return UIImage(named: code.lowercased(),
+            in: bundle, compatibleWith: nil)!
     }
 }
 
@@ -171,8 +172,8 @@ public class CountryPickerView: NibView {
     
     public let countries: [Country] = {
         var countries = [Country]()
-        let bundle = Bundle(for: CountryPickerView.self)
-        guard let jsonPath = bundle.path(forResource: "CountryPickerView.bundle/Data/CountryCodes", ofType: "json"),
+        let bundle = Bundle.module
+        guard let jsonPath = bundle.path(forResource: "CountryCodes", ofType: "json"),
             let jsonData = try? Data(contentsOf: URL(fileURLWithPath: jsonPath)) else {
                 return countries
         }
