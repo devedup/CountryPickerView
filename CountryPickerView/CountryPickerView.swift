@@ -93,7 +93,9 @@ public class CountryPickerView: NibView {
         }
     }
     
-    weak public var dataSource: CountryPickerViewDataSource?
+    weak public var dataSource: CountryPickerViewDataSource? {
+        didSet { setup() }
+    }
     weak public var delegate: CountryPickerViewDelegate?
     weak public var hostViewController: UIViewController?
     
@@ -113,12 +115,14 @@ public class CountryPickerView: NibView {
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+    }
+    
+    public override func awakeFromNib() {
+        super.awakeFromNib()
     }
     
     func setup() {
@@ -201,8 +205,10 @@ public class CountryPickerView: NibView {
     }()
     
     internal var usableCountries: [Country] {
-        let excluded = dataSource?.excludedCountries(in: self) ?? []
-        return countries.filter { return !excluded.contains($0) }
+        let includedCountryCodes = dataSource?.includedCountryCodes(in: self) ?? ["GB"]
+        return countries.filter {
+            return includedCountryCodes.contains($0.code)
+        }
     }
 }
 

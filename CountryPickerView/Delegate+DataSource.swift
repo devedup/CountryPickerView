@@ -69,7 +69,7 @@ public protocol CountryPickerViewDataSource: class {
     /// Determines if a country's phone code is shown alongside the country's name on the list.
     /// e.g Nigeria (+234)
     func showPhoneCodeInList(in countryPickerView: CountryPickerView) -> Bool
-    
+        
     /// Determines if a country's code is shown alongside the country's name on the list.
     /// e.g Nigeria (NG)
     func showCountryCodeInList(in countryPickerView: CountryPickerView) -> Bool
@@ -81,10 +81,12 @@ public protocol CountryPickerViewDataSource: class {
     func localeForCountryNameInList(in countryPickerView: CountryPickerView) -> Locale
     
     /// An array of countries you wish to exclude from the list of countries.
-    func excludedCountries(in countryPickerView: CountryPickerView) -> [Country]
+    func includedCountryCodes(in countryPickerView: CountryPickerView) -> [String]
     
     /// The tint colour of the cell which will colour the accessory tick
     func selectedItemTintColour(in countryPickerView: CountryPickerView) -> UIColor?
+    
+    func backgroundColour() -> UIColor?
 }
 
 // MARK:- CountryPickerViewDataSource default implementations
@@ -145,7 +147,7 @@ public extension CountryPickerViewDataSource {
     func showCountryCodeInList(in countryPickerView: CountryPickerView) -> Bool {
         return false
     }
-    
+
     func showCheckmarkInList(in countryPickerView: CountryPickerView) -> Bool {
         return true
     }
@@ -154,11 +156,15 @@ public extension CountryPickerViewDataSource {
         return Locale.current
     }
     
-    func excludedCountries(in countryPickerView: CountryPickerView) -> [Country] {
+    func includedCountryCodes(in countryPickerView: CountryPickerView) -> [String] {
         return []
     }
     
     func selectedItemTintColour(in countryPickerView: CountryPickerView) -> UIColor? {
+        return nil
+    }
+    
+    func backgroundColour() -> UIColor? {
         return nil
     }
 }

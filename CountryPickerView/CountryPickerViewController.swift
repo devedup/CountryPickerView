@@ -32,10 +32,10 @@ public class CountryPickerViewController: UITableViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
         prepareTableItems()
         prepareNavItem()
         prepareSearchBar()
+        view.backgroundColor = countryPickerView.dataSource?.backgroundColour()
     }
    
 }
@@ -96,6 +96,10 @@ extension CountryPickerViewController {
         searchController?.definesPresentationContext = true
         searchController?.searchBar.delegate = self
         searchController?.delegate = self
+        if #available(iOS 13.0, *) {
+            searchController?.searchBar.searchTextField.backgroundColor = countryPickerView.dataSource?.backgroundColour()
+            searchController?.searchBar.searchTextField.font = countryPickerView.dataSource?.cellLabelFont(in: countryPickerView)
+        }
 
         switch searchBarPosition {
         case .tableViewHeader: tableView.tableHeaderView = searchController?.searchBar
@@ -183,7 +187,7 @@ extension CountryPickerViewController {
 extension CountryPickerViewController {
 
     override public func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let header = view as? UITableViewHeaderFooterView {
+        if let header = view as? UITableViewHeaderFooterView {            
             header.textLabel?.font = dataSource.sectionTitleLabelFont
             if let color = dataSource.sectionTitleLabelColor {
                 header.textLabel?.textColor = color
@@ -356,8 +360,8 @@ class CountryPickerViewDataSourceInternal: CountryPickerViewDataSource {
         return view.dataSource?.localeForCountryNameInList(in: view) ?? localeForCountryNameInList(in: view)
     }
     
-    var excludedCountries: [Country] {
-        return view.dataSource?.excludedCountries(in: view) ?? excludedCountries(in: view)
+    var includedCountryCodes: [String] {
+        return view.dataSource?.includedCountryCodes(in: view) ?? includedCountryCodes(in: view)
     }
     
     var cellTintColour: UIColor? {
